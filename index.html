@@ -3,20 +3,33 @@
 <head>
     <title>Redirecting...</title>
     <script>
-        // Check if the app is installed
+        // Extract query parameters from the URL
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('stay'); // Get the value of the 'stay' parameter
+        }
+
         window.onload = function () {
+            const stay = getQueryParams(); // Extract the 'stay' query parameter
+            console.log("Stay parameter:", stay);
+
+            // If the 'stay' parameter exists, include it in the deep link
+            const deepLink = stay
+                ? `kevin-tom26.github.io://?stay=${encodeURIComponent(stay)}`
+                : "kevin-tom26.github.io://";
+
             // Try opening the app using a deep link
             setTimeout(function () {
-                // If the app is not opened within 2 seconds, redirect to the Play Store
+                // Redirect to the Play Store if the app is not installed
                 window.location.href = "https://play.google.com/store/apps/details?id=com.bookmyloft.app";
             }, 2000);
 
             // Attempt to open the app
-            window.location.href = "kevin-tom26.github.io://?stay=Luxury%20Stays"; // Replace with your deep link
+            window.location.href = deepLink;
         };
     </script>
 </head>
 <body>
-    <p>Redirecting...</p>
+    <p>Redirecting to the app...</p>
 </body>
 </html>
