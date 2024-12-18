@@ -3,22 +3,31 @@
 <head>
     <title>Redirecting...</title>
     <script>
-        // Extract query parameters from the URL
+        // Extract all query parameters from the URL as an object
         function getQueryParams() {
             const params = new URLSearchParams(window.location.search);
-            return params.get('stay'); // Get the value of the 'stay' parameter
+            const queryObject = {};
+            params.forEach((value, key) => {
+                queryObject[key] = value;
+            });
+            return queryObject; // Return an object of all query parameters
         }
 
         window.onload = function () {
-            const stay = getQueryParams(); // Extract the 'stay' query parameter
-            console.log("Stay parameter:", stay);
+            const queryParams = getQueryParams(); // Extract all query parameters
+            console.log("Query parameters:", queryParams);
 
-            // If the 'stay' parameter exists, include it in the deep link
-            const deepLink = stay
-                ? `kevin-tom26.github.io://?stay=${encodeURIComponent(stay)}`
+            // Build the query string for the deep link
+            const queryString = new URLSearchParams(queryParams).toString();
+
+            // Construct the deep link with all query parameters
+            const deepLink = queryString
+                ? `kevin-tom26.github.io://?${queryString}`
                 : "kevin-tom26.github.io://";
 
-            // Try opening the app using a deep link
+            console.log("Deep link:", deepLink);
+
+            // Try opening the app using the deep link
             setTimeout(function () {
                 // Redirect to the Play Store if the app is not installed
                 window.location.href = "https://play.google.com/store/apps/details?id=com.bookmyloft.app";
