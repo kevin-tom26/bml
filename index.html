@@ -3,6 +3,29 @@
 <head>
     <title>Redirecting...</title>
     <script>
+        // Detect the user's platform (iOS, macOS, Android, etc.)
+        function getPlatform() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+            // Check for iOS
+            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                return 'iOS';
+            }
+
+            // Check for macOS (Desktop Apple products)
+            if (/Macintosh/.test(userAgent) && !window.MSStream) {
+                return 'macOS';
+            }
+
+            // Check for Android
+            if (/android/i.test(userAgent)) {
+                return 'Android';
+            }
+
+            // Default to unknown for other platforms (Windows, Linux, etc.)
+            return 'unknown';
+        }
+
         // Extract all query parameters from the URL as an object
         function getQueryParams() {
             const params = new URLSearchParams(window.location.search);
@@ -22,18 +45,26 @@
 
             // Construct the deep link with all query parameters
             const deepLink = queryString
-                ? `kevin-tom26.github.io://?${queryString}`
-                : "kevin-tom26.github.io://";
+                ? `bookmyloft://?${queryString}` // Replace 'bookmyloft' with your app's scheme
+                : "bookmyloft://";
 
             console.log("Deep link:", deepLink);
 
-            // Try opening the app using the deep link
+            // Attempt to open the app using the deep link
             setTimeout(function () {
-                // Redirect to the Play Store if the app is not installed
-                window.location.href = "https://play.google.com/store/apps/details?id=com.bookmyloft.app";
+                const platform = getPlatform();
+                console.log("Detected platform:", platform);
+
+                if (platform === 'iOS' || platform === 'macOS') {
+                    // Redirect to the App Store
+                    window.location.href = "https://apps.apple.com/app/id123456789"; // Replace with your App Store link
+                } else if (platform === 'Android' || platform === 'unknown') {
+                    // Redirect to the Play Store
+                    window.location.href = "https://play.google.com/store/apps/details?id=com.bookmyloft.app"; // Replace with your Play Store link
+                }
             }, 2000);
 
-            // Attempt to open the app
+            // Open the app using the deep link
             window.location.href = deepLink;
         };
     </script>
